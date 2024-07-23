@@ -56,6 +56,8 @@ public class HearthstoneAPIManager : MonoBehaviour
                 MinionData response = JsonConvert.DeserializeObject<MinionData>(request.downloadHandler.text);
 
 
+
+
             }
             else
             {
@@ -65,6 +67,14 @@ public class HearthstoneAPIManager : MonoBehaviour
 
         yield return null;
     }
+
+    private void Clean(MinionData response)
+    {
+
+    }
+
+
+
 
     private IEnumerator DownloadTexture(string url, int i)
     {
