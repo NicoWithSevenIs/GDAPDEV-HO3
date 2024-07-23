@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+using TMPro;
 
 public class HearthstoneAPIManager : MonoBehaviour
 {
+
+    [SerializeField] private Image _cardImage;
+    [SerializeField] private TextMeshProUGUI _cost;
+    [SerializeField] private TextMeshProUGUI _hp;
+    [SerializeField] private TextMeshProUGUI _atk;
+
     private string _baseURL = "https://omgvamp-hearthstone-v1.p.rapidapi.com/";
     private string _baseTextureURL = "https://art.hearthstonejson.com/v1/orig";
     private string _apiHost = "omgvamp-hearthstone-v1.p.rapidapi.com";
