@@ -75,7 +75,7 @@ public class HearthstoneAPIManager : MonoBehaviour
                 //Debug.Log("name: " + test.Name);
                 Debug.Log("size: " + response.Count);
                 Clean(response);
-                 Debug.Log("size after cleaning: " + response.Count);
+                Debug.Log("size after cleaning: " + response.Count);
                 int rng = randomIndex(response);
 
                 string cardID = response[rng].CardId;
@@ -103,7 +103,7 @@ public class HearthstoneAPIManager : MonoBehaviour
     private IEnumerator DownloadTexture(string cardID)
     {
       
-        string url = "https://art.hearthstonejson.com/v1/orig/" + cardID + ".png";
+        string url = _baseTextureURL + cardID + ".png";
 
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
