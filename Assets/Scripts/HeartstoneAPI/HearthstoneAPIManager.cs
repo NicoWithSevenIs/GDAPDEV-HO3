@@ -63,6 +63,9 @@ public class HearthstoneAPIManager : MonoBehaviour
 
                 MinionData response = JsonConvert.DeserializeObject<MinionData>(request.downloadHandler.text);
 
+                //yield return DownloadTexture(respo)
+
+               //_hp.text = 
 
 
 
@@ -94,6 +97,11 @@ public class HearthstoneAPIManager : MonoBehaviour
         {
             DownloadHandlerTexture response = (DownloadHandlerTexture)request.downloadHandler;
             Texture texture = response.texture;
+
+            _cardImage.sprite = Sprite.Create(response.texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+            
+            
+            
             //this._cardObject.GetComponent<MeshRenderer>().material.mainTexture = texture;
             //this._cardObject.GetComponent<Renderer>().material.mainTexture = texture;
         }
