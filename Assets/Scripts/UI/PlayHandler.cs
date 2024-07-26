@@ -11,12 +11,10 @@ public class PlayHandler : MonoBehaviour
     private void Start()
     {
         gameContainer.SetActive(false);
-        Time.timeScale = 0f;
     }
     public void Play()
     {
         gameContainer.SetActive(true);
         gameObject.SetActive(false);
-        Time.timeScale = 1f;
     }
 }
