@@ -5,12 +5,15 @@ using Newtonsoft.Json;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using TMPro;
+using NUnit.Framework.Internal;
+using Unity.VisualScripting;
+using static System.Net.WebRequestMethods;
 
 public class HearthstoneAPIManager : MonoBehaviour
 {
 
     [SerializeField] private Image _cardImage;
-    [SerializeField] private TextMeshProUGUI _cost;
+    [SerializeField] private TextMeshProUGUI _name;
     [SerializeField] private TextMeshProUGUI _hp;
     [SerializeField] private TextMeshProUGUI _atk;
 
@@ -31,6 +34,11 @@ public class HearthstoneAPIManager : MonoBehaviour
     }
 
     #endregion
+
+    private void Start()
+    {
+        this.CreateCard();
+    }
 
     public void CreateCard()
     {
@@ -61,14 +69,26 @@ public class HearthstoneAPIManager : MonoBehaviour
             {
                 Debug.Log("JSON Response " + request.downloadHandler.text);
 
-                MinionData response = JsonConvert.DeserializeObject<MinionData>(request.downloadHandler.text);
+                List<MinionData> response = JsonConvert.DeserializeObject<List<MinionData>>(request.downloadHandler.text);
 
-                //yield return DownloadTexture(respo)
+                //MinionData test = response[0];
+                //Debug.Log("name: " + test.Name);
+                Debug.Log("size: " + response.Count);
+                Clean(response);
+                 Debug.Log("size after cleaning: " + response.Count);
+                int rng = randomIndex(response);
 
-               //_hp.text = 
+                string cardID = response[rng].CardId;
 
 
+                this._name.text = response[rng].Name;
+                this._hp.text = response[rng].Health.ToString();
+                this._atk.text = response[rng].Attack.ToString();
 
+                this.StartCoroutine(this.DownloadTexture(cardID));
+
+             
+        
             }
             else
             {
@@ -79,16 +99,12 @@ public class HearthstoneAPIManager : MonoBehaviour
         yield return null;
     }
 
-    private void Clean(MinionData response)
+
+    private IEnumerator DownloadTexture(string cardID)
     {
+      
+        string url = "https://art.hearthstonejson.com/v1/orig/" + cardID + ".png";
 
-    }
-
-
-
-
-    private IEnumerator DownloadTexture(string url, int i)
-    {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
 
@@ -100,16 +116,35 @@ public class HearthstoneAPIManager : MonoBehaviour
 
             _cardImage.sprite = Sprite.Create(response.texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
             
-            
-            
-            //this._cardObject.GetComponent<MeshRenderer>().material.mainTexture = texture;
-            //this._cardObject.GetComponent<Renderer>().material.mainTexture = texture;
         }
         else
         {
             Debug.Log(request.error);
         }
-        yield return null;
+
     }
+
+
+    private void Clean(List<MinionData> response)
+    {
+       // int index;
+        for (int i = 0; i < response.Count; i++)
+        {
+            if (response[i].Type != "Minion")
+            {
+                response.RemoveAt(i);
+                i = 0;
+            }
+        }
+
+        if (response[0].Type != "Minion") 
+            response.RemoveAt(0);
+    }
+    //7 minions
+    private int randomIndex(List<MinionData> response)
+    {
+        return Random.Range(0, response.Count);
+    }
+
 
 }
